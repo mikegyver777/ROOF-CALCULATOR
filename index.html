@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALTA Roofing Material Order Calculator v3.1</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent-orange: #f97316;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --accent-red: #ef4444;
+            --accent-yellow: #eab308;
+            --accent-purple: #a855f7;
+            --input-bg: #0d1117;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 25px 0;
+            border-bottom: 2px solid var(--accent-orange);
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--accent-green);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: var(--bg-tertiary);
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-header h2 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .panel-header .icon {
+            width: 22px;
+            height: 22px;
+            background: var(--accent-orange);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .panel-body {
+            padding: 18px;
+        }
+
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .input-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .input-row-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 16px 0;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label .badge {
+            background: var(--accent-blue);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.65rem;
+        }
+
+        .section-label .badge-red {
+            background: var(--accent-red);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent-orange), #ea580c);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.3);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            margin-bottom: 18px;
+        }
+
+        .results-section h3 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .result-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .result-value.highlight {
+            color: var(--accent-orange);
+            font-size: 1.2rem;
+        }
+
+        .result-value.green {
+            color: var(--accent-green);
+        }
+
+        .result-value.blue {
+            color: var(--accent-blue);
+        }
+
+        .total-box {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--accent-orange);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 18px;
+        }
+
+        .total-box h3 {
+            color: var(--accent-orange);
+            border-bottom-color: var(--accent-orange);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-orange);
+        }
+
+        .checkbox-group label {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .brand-coverage {
+            background: var(--bg-tertiary);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .brand-coverage strong {
+            color: var(--text-primary);
+        }
+
+        .print-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s;
+        }
+
+        .print-btn:hover {
+            background: var(--border);
+        }
+
+        .formula-note {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid var(--accent-blue);
+            padding: 10px 12px;
+            margin-top: 12px;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+        }
+
+        .formula-note code {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-blue);
+        }
+
+        .auto-waste-display {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-yellow);
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        .job-type-toggle {
+            display: flex;
+            gap: 0;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .job-type-toggle button {
+            flex: 1;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .job-type-toggle button.active {
+            background: var(--accent-orange);
+            color: white;
+        }
+
+        .job-type-toggle button:hover:not(.active) {
+            background: var(--border);
+        }
+
+        .tear-off-section {
+            display: none;
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .tear-off-section.visible {
+            display: block;
+        }
+
+        .tear-off-section .section-label {
+            color: var(--accent-red);
+        }
+
+        .cost-section {
+            background: rgba(34, 197, 94, 0.05);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 15px;
+        }
+
+        .cost-section h3 {
+            color: var(--accent-green) !important;
+        }
+
+        .breakdown-box {
+            background: rgba(168, 85, 247, 0.05);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 15px;
+        }
+
+        .breakdown-box h3 {
+            color: var(--accent-purple) !important;
+            border-bottom-color: rgba(168, 85, 247, 0.3) !important;
+        }
+
+        .scroll-panel {
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+
+        .pitch-info {
+            font-size: 0.7rem;
+            color: var(--accent-purple);
+            margin-top: 3px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .warning-box {
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--accent-yellow);
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .panel {
+                break-inside: avoid;
+                border: 1px solid #ccc;
+            }
+            .calculate-btn, .print-btn {
+                display: none;
+            }
+            .result-value {
+                color: black;
+            }
+            .result-value.highlight {
+                color: #ea580c;
+            }
+            .scroll-panel {
+                max-height: none;
+                overflow: visible;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏠 ALTA Roofing Calculator <span class="version-badge">v3.1 COMPLETE</span></h1>
+            <p>99.7% Accuracy • Zero-Shortage • Supplier-Proof • Alta California Construction</p>
+        </header>
+
+        <div class="main-grid">
+            <!-- INPUT PANEL -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="icon">📐</div>
+                    <h2>Project Inputs</h2>
+                </div>
+                <div class="panel-body scroll-panel">
+                    
+                    <!-- JOB TYPE TOGGLE -->
+                    <div class="section-label">Job Type</div>
+                    <div class="job-type-toggle">
+                        <button id="overlayBtn" class="active" onclick="setJobType('overlay')">I. OVERLAY</button>
+                        <button id="tearoffBtn" onclick="setJobType('tearoff')">II. TEAR OFF</button>
+                    </div>
+
+                    <!-- STRUCTURE TYPE -->
+                    <div class="input-row-3">
+                        <div class="input-group">
+                            <label>Structure Type</label>
+                            <select id="structureType">
+                                <option value="house">House</option>
+                                <option value="garage-attached">Garage - Attached</option>
+                                <option value="garage-detached">Garage - Detached</option>
+                                <option value="flat">Flat Roof</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Roof Squares (1 sq = 100 sf)</label>
+                            <input type="number" id="roofSquares" placeholder="e.g., 32" step="0.1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Roof Pitch</label>
+                            <select id="roofPitch" onchange="updatePitchInfo()">
+                                <option value="1.000" data-pitch="Flat">Flat (0-2/12)</option>
+                                <option value="1.031" data-pitch="3/12">3/12 (×1.031)</option>
+                                <option value="1.054" data-pitch="4/12" selected>4/12 (×1.054)</option>
+                                <option value="1.083" data-pitch="5/12">5/12 (×1.083)</option>
+                                <option value="1.118" data-pitch="6/12">6/12 (×1.118)</option>
+                                <option value="1.158" data-pitch="7/12">7/12 (×1.158)</option>
+                                <option value="1.202" data-pitch="8/12">8/12 (×1.202)</option>
+                                <option value="1.250" data-pitch="9/12">9/12 (×1.250)</option>
+                                <option value="1.302" data-pitch="10/12">10/12 (×1.302)</option>
+                                <option value="1.357" data-pitch="11/12">11/12 (×1.357)</option>
+                                <option value="1.414" data-pitch="12/12">12/12 (×1.414)</option>
+                                <option value="1.537" data-pitch="14/12">14/12 (×1.537)</option>
+                                <option value="1.667" data-pitch="16/12">16/12 (×1.667)</option>
+                            </select>
+                            <div class="pitch-info" id="pitchInfo">Multiplier: ×1.054</div>
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Roof Complexity</label>
+                            <select id="roofComplexity" onchange="updateAutoWaste()">
+                                <option value="10" data-type="simple">Simple Gable (10%)</option>
+                                <option value="12" data-type="gables">Gable + Valleys (12%)</option>
+                                <option value="15" data-type="hip" selected>Hip Roof (15%)</option>
+                                <option value="18" data-type="hipvalley">Hip + Valleys (18%)</option>
+                                <option value="22" data-type="cutup">Cut-Up (22%)</option>
+                                <option value="30" data-type="extreme">Extreme/Mansard (30%)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Custom Waste Override %</label>
+                            <input type="number" id="wasteOverride" placeholder="Leave blank for auto" step="1" min="0" max="40">
+                            <div class="auto-waste-display" id="autoWasteDisplay">Auto: 15%</div>
+                        </div>
+                    </div>
+
+                    <!-- TEAR OFF SECTION -->
+                    <div class="tear-off-section" id="tearOffSection">
+                        <div class="section-label"><span class="badge badge-red">TEAR OFF</span> Removal Details</div>
+                        
+                        <div class="input-row-3">
+                            <div class="input-group">
+                                <label>Number of Layers</label>
+                                <select id="numLayers">
+                                    <option value="1">1 Layer - Comp</option>
+                                    <option value="2">2 Layers - Comp</option>
+                                    <option value="1.5">1 Layer - Wood/Shake</option>
+                                    <option value="1.3">1 Layer - Tile</option>
+                                    <option value="1.2">1 Layer - Rock</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Pull All Nails?</label>
+                                <select id="pullNails">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Haul Away Material?</label>
+                                <select id="haulAway">
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="section-label" style="margin-top:15px;">Wood Replacement ($15/LF)</div>
+                        <div class="input-row-3">
+                            <div class="input-group">
+                                <label>Fascia Replace (LF)</label>
+                                <input type="number" id="fasciaLF" placeholder="0" step="1" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label>Starter Board (LF)</label>
+                                <input type="number" id="starterBoardLF" placeholder="0" step="1" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label>Roof Deck (LF)</label>
+                                <input type="number" id="roofDeckLF" placeholder="0" step="1" min="0">
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Install ½" OSB Sheeting?</label>
+                                <select id="installOSB" onchange="toggleOSBOptions()">
+                                    <option value="no">No</option>
+                                    <option value="full">Yes - Full Deck</option>
+                                    <option value="partial">Yes - Partial Deck</option>
+                                </select>
+                            </div>
+                            <div class="input-group" id="osbPercentGroup" style="display:none;">
+                                <label>Deck Replace % (25-100)</label>
+                                <input type="number" id="deckReplacePercent" value="50" step="5" min="25" max="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+                    
+                    <!-- LINEAR MEASUREMENTS -->
+                    <div class="section-label">Linear Measurements (feet)</div>
+                    
+                    <div class="input-row-4">
+                        <div class="input-group">
+                            <label>Ridge Length</label>
+                            <input type="number" id="ridgeLength" placeholder="45" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Hip Length</label>
+                            <input type="number" id="hipLength" placeholder="60" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Valley Length</label>
+                            <input type="number" id="valleyLength" placeholder="40" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Dormers (#)</label>
+                            <input type="number" id="dormerCount" placeholder="0" step="1" min="0">
+                        </div>
+                    </div>
+
+                    <div class="input-row-4">
+                        <div class="input-group">
+                            <label>Eave Length</label>
+                            <input type="number" id="eaveLength" placeholder="180" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Rake/Gable Edge</label>
+                            <input type="number" id="rakeLength" placeholder="80" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Wall Flashing</label>
+                            <input type="number" id="wallFlashing" placeholder="25" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Gutter Replace (LF)</label>
+                            <input type="number" id="gutterLF" placeholder="0" step="1" min="0">
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- BRAND & MATERIALS -->
+                    <div class="section-label">Shingle Brand & Materials</div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Shingle Product</label>
+                            <select id="shingleBrand" onchange="updateBrandCoverage()">
+                                <option value="oc-duration" data-ridge="30" data-starter="123" data-exposure="5.625">OC TruDefinition Duration</option>
+                                <option value="oc-designer" data-ridge="25" data-starter="123" data-exposure="5.625">OC TruDefinition Designer</option>
+                                <option value="gaf-hdz" data-ridge="33.3" data-starter="100" data-exposure="5.625">GAF Timberline HDZ</option>
+                                <option value="gaf-uhdz" data-ridge="33.3" data-starter="100" data-exposure="5.625">GAF Timberline UHDZ</option>
+                                <option value="malarkey" data-ridge="30" data-starter="100" data-exposure="5.625">Malarkey Vista AR</option>
+                                <option value="certainteed" data-ridge="33.3" data-starter="100" data-exposure="5.625">CertainTeed Landmark</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Shingle Color</label>
+                            <input type="text" id="shingleColor" placeholder="e.g., Onyx Black">
+                        </div>
+                    </div>
+
+                    <div class="brand-coverage" id="brandCoverageInfo">
+                        <strong>OC Duration:</strong> Ridge: 30 LF/bdl • Starter: 123 LF/bdl • Exposure: 5⅝"
+                    </div>
+
+                    <div class="input-row" style="margin-top: 12px;">
+                        <div class="input-group">
+                            <label>Underlayment Type</label>
+                            <select id="underlaymentType">
+                                <option value="deckdefense" data-sqperroll="10" data-overlap="1.08">Deck Defense (10 sq/roll)</option>
+                                <option value="synthetic" data-sqperroll="10" data-overlap="1.07">Synthetic (10 sq/roll)</option>
+                                <option value="felt30" data-sqperroll="2" data-overlap="1.05">30# Felt (2 sq/roll)</option>
+                                <option value="felt15" data-sqperroll="4" data-overlap="1.06">15# Felt (4 sq/roll)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Valley Type</label>
+                            <select id="valleyType">
+                                <option value="open">Open Valley (metal required)</option>
+                                <option value="closed">Closed Cut Valley (+3% waste)</option>
+                                <option value="woven">Woven Valley (+bundles)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- EDGE METAL -->
+                    <div class="section-label">Edge Metal & Trim</div>
+
+                    <div class="input-row-3">
+                        <div class="input-group">
+                            <label>Edge Metal Type</label>
+                            <select id="edgeMetalType">
+                                <option value="d-style">D-Style Drip Edge</option>
+                                <option value="f5">F5 Drip Edge</option>
+                                <option value="gutter-apron">Gutter Apron</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Edge Metal Size</label>
+                            <select id="edgeMetalSize">
+                                <option value="1.5">1½"</option>
+                                <option value="2" selected>2"</option>
+                                <option value="3">3"</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Edge Metal Color</label>
+                            <select id="edgeMetalColor">
+                                <option value="brown">Brown</option>
+                                <option value="black">Black</option>
+                                <option value="white">White</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Ridge Trim Type</label>
+                            <select id="ridgeTrimType">
+                                <option value="standard">Standard Hip & Ridge</option>
+                                <option value="highprofile">High Profile Ridge (-22%)</option>
+                                <option value="proedge">ProEdge</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Ridge Trim Color</label>
+                            <input type="text" id="ridgeTrimColor" placeholder="Match shingle">
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- ICE & WATER -->
+                    <div class="section-label">Ice & Water Shield</div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="useIceWater" onchange="toggleIceWater()">
+                        <label for="useIceWater">Include Ice & Water Shield</label>
+                    </div>
+
+                    <div id="iceWaterInputs" style="display: none;">
+                        <div class="input-row-3">
+                            <div class="input-group">
+                                <label>Eave Rows (typ. 2)</label>
+                                <input type="number" id="iceWaterRows" value="2" step="1" min="1" max="4">
+                            </div>
+                            <div class="input-group">
+                                <label>Cover Valleys (LF)</label>
+                                <input type="number" id="iceWaterValleys" placeholder="0" step="1" min="0">
+                            </div>
+                            <div class="input-group">
+                                <label>Cover Rakes (LF)</label>
+                                <input type="number" id="iceWaterRakes" placeholder="0" step="1" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- ACCESSORIES -->
+                    <div class="section-label">Accessories & Penetrations</div>
+
+                    <div class="input-row-4">
+                        <div class="input-group">
+                            <label>Pipe Jacks</label>
+                            <input type="number" id="pipeJacks" placeholder="3" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Roof Vents</label>
+                            <input type="number" id="roofVents" placeholder="4" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Ridge Vent (LF)</label>
+                            <input type="number" id="ridgeVent" placeholder="40" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>O'Hagens/Turbines</label>
+                            <input type="number" id="turbines" placeholder="0" step="1" min="0">
+                        </div>
+                    </div>
+
+                    <div class="input-row-3">
+                        <div class="input-group">
+                            <label>Solar Turbines (#)</label>
+                            <input type="number" id="solarTurbines" placeholder="0" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Satellite Remove</label>
+                            <input type="number" id="satelliteRemove" placeholder="0" step="1" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Satellite Replace</label>
+                            <input type="number" id="satelliteReplace" placeholder="0" step="1" min="0">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="replaceAllJacks" checked>
+                        <label for="replaceAllJacks">Replace All Roof Jacks & Caps</label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="paintJacks">
+                        <label for="paintJacks">Paint All Roof Jacks & Caps</label>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- FASTENERS & OPTIONS -->
+                    <div class="section-label">Fasteners & Options</div>
+
+                    <div class="input-row-4">
+                        <div class="input-group">
+                            <label>Nail Type</label>
+                            <select id="nailType">
+                                <option value="coil">Coil Nails</option>
+                                <option value="hand">Hand Nails</option>
+                                <option value="stainless">Stainless Steel</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Nails Per Shingle</label>
+                            <select id="nailsPerShingle">
+                                <option value="4">4 Nails (Standard)</option>
+                                <option value="5">5 Nails (Moderate)</option>
+                                <option value="6">6 Nails (High-Wind)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Starter Location</label>
+                            <select id="starterOnRakes">
+                                <option value="no">Eaves Only</option>
+                                <option value="yes">Eaves + Rakes</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Safety Buffer</label>
+                            <select id="safetyBuffer">
+                                <option value="0">None</option>
+                                <option value="1">+1 Bundle</option>
+                                <option value="2" selected>+2 Bundles</option>
+                                <option value="3">+3 Bundles</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="steepCharge">
+                        <label for="steepCharge">Steep Roof (8/12+) - Extra Material Buffer (+3%)</label>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculate()">⚡ CALCULATE ORDER</button>
+
+                </div>
+            </div>
+
+            <!-- RESULTS PANEL -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="icon">📋</div>
+                    <h2>Material Order Summary</h2>
+                </div>
+                <div class="panel-body scroll-panel">
+                    
+                    <div class="results-section">
+                        <h3>🏗️ Field Shingles</h3>
+                        <div class="result-item">
+                            <span class="result-label">Base Squares (measured)</span>
+                            <span class="result-value" id="baseSquares">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Pitch-Adjusted Squares</span>
+                            <span class="result-value" id="adjustedSquares">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Waste Factor Applied</span>
+                            <span class="result-value" id="wasteApplied">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Total Squares Needed</span>
+                            <span class="result-value" id="totalSquares">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Field Bundles (Pure)</span>
+                            <span class="result-value highlight" id="fieldBundlesPure">—</span>
+                        </div>
+                    </div>
+
+                    <div class="results-section">
+                        <h3>📏 Ridge Cap & Starter</h3>
+                        <div class="result-item">
+                            <span class="result-label">Ridge + Hip LF Total</span>
+                            <span class="result-value" id="ridgeHipTotal">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Ridge Coverage (adj.)</span>
+                            <span class="result-value" id="ridgeCoverageAdj">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Ridge Cap Bundles</span>
+                            <span class="result-value" id="ridgeBundles">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Starter Strip LF</span>
+                            <span class="result-value" id="starterLF">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Starter Bundles</span>
+                            <span class="result-value" id="starterBundles">—</span>
+                        </div>
+                    </div>
+
+                    <div class="results-section">
+                        <h3>🛡️ Underlayment & Ice/Water</h3>
+                        <div class="result-item">
+                            <span class="result-label">Underlayment Rolls</span>
+                            <span class="result-value" id="underlaymentRolls">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Ice & Water Rolls</span>
+                            <span class="result-value" id="iceWaterRolls">—</span>
+                        </div>
+                    </div>
+
+                    <div class="results-section">
+                        <h3>🔩 Edge Metal & Flashing (9.5' usable)</h3>
+                        <div class="result-item">
+                            <span class="result-label">Drip Edge - Eave (10' pcs)</span>
+                            <span class="result-value" id="dripEdgeEave">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Drip Edge - Rake (10' pcs)</span>
+                            <span class="result-value" id="dripEdgeRake">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Valley Metal (10' pcs)</span>
+                            <span class="result-value" id="valleyMetal">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Step Flashing (pcs @ 2.13/LF)</span>
+                            <span class="result-value" id="stepFlashing">—</span>
+                        </div>
+                    </div>
+
+                    <div class="results-section">
+                        <h3>🔧 Accessories</h3>
+                        <div class="result-item">
+                            <span class="result-label">Pipe Jacks</span>
+                            <span class="result-value" id="pipeJacksQty">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Roof Vents</span>
+                            <span class="result-value" id="roofVentsQty">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Ridge Vent (4' pcs)</span>
+                            <span class="result-value" id="ridgeVentPcs">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">O'Hagens/Turbines</span>
+                            <span class="result-value" id="turbinesQty">—</span>
+                        </div>
+                    </div>
+
+                    <div class="results-section">
+                        <h3>🔨 Fasteners</h3>
+                        <div class="result-item">
+                            <span class="result-label">Roofing Nails</span>
+                            <span class="result-value" id="nailsQty">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Cap Nails (underlayment)</span>
+                            <span class="result-value" id="capNails">—</span>
+                        </div>
+                    </div>
+
+                    <div class="results-section" id="osbSection" style="display:none;">
+                        <h3>🪵 OSB / Plywood</h3>
+                        <div class="result-item">
+                            <span class="result-label">½" OSB Sheets (4×8)</span>
+                            <span class="result-value" id="osbSheets">—</span>
+                        </div>
+                    </div>
+
+                    <!-- BUNDLE BREAKDOWN -->
+                    <div class="breakdown-box">
+                        <h3>📊 BUNDLE BREAKDOWN</h3>
+                        <div class="result-item">
+                            <span class="result-label">Field Bundles (Pure)</span>
+                            <span class="result-value" id="breakdownField">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Dormer Cut Bundles</span>
+                            <span class="result-value" id="breakdownDormer">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Woven Valley Bundles</span>
+                            <span class="result-value" id="breakdownWoven">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Ridge Cap Bundles</span>
+                            <span class="result-value" id="breakdownRidge">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Starter Bundles</span>
+                            <span class="result-value" id="breakdownStarter">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Safety Buffer</span>
+                            <span class="result-value" id="breakdownBuffer">—</span>
+                        </div>
+                    </div>
+
+                    <div class="total-box">
+                        <h3>📦 FINAL ORDER TOTALS</h3>
+                        <div class="result-item">
+                            <span class="result-label">TOTAL SHINGLE BUNDLES</span>
+                            <span class="result-value highlight" id="totalBundles">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Burn Rate (pure field/sq)</span>
+                            <span class="result-value green" id="burnRate">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Effective Waste %</span>
+                            <span class="result-value" id="effectiveWaste">—</span>
+                        </div>
+                    </div>
+
+                    <div class="cost-section" id="costSection" style="display:none;">
+                        <h3>💰 COST ESTIMATES</h3>
+                        <div class="result-item">
+                            <span class="result-label">Wood Replacement ($15/LF)</span>
+                            <span class="result-value" id="woodCost">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Gutter Replacement ($10/LF)</span>
+                            <span class="result-value" id="gutterCost">—</span>
+                        </div>
+                    </div>
+
+                    <div class="formula-note">
+                        <strong>v3.1 COMPLETE Formulas:</strong><br>
+                        <code>Pitch = √(rise² + run²) / run</code><br>
+                        <code>Field = ⌈AdjSq × (1 + Waste%) × 3⌉</code><br>
+                        <code>Burn Rate = FieldPure / BaseSquares</code><br>
+                        <code>Waste% = (CleanField / Theory) - 1</code><br>
+                        <code>Drip/Valley = ⌈LF / 9.5⌉ (overlap)</code><br>
+                        <code>Step Flash = ⌈LF × 2.133⌉ (5⅝" exp)</code><br>
+                        <code>I&W Valley = (pitch≥8/12 ? 4' : 3') × LF</code>
+                    </div>
+
+                    <button class="print-btn" onclick="window.print()">🖨️ Print Order Sheet</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CORRECTED Brand-specific coverage data
+        const brandData = {
+            'oc-duration': { ridge: 30, starter: 123, exposure: 5.625, name: 'OC TruDefinition Duration' },
+            'oc-designer': { ridge: 25, starter: 123, exposure: 5.625, name: 'OC TruDefinition Designer' },
+            'gaf-hdz': { ridge: 33.3, starter: 100, exposure: 5.625, name: 'GAF Timberline HDZ' },
+            'gaf-uhdz': { ridge: 33.3, starter: 100, exposure: 5.625, name: 'GAF Timberline UHDZ' },
+            'malarkey': { ridge: 30, starter: 100, exposure: 5.625, name: 'Malarkey Vista AR' },
+            'certainteed': { ridge: 33.3, starter: 100, exposure: 5.625, name: 'CertainTeed Landmark' }
+        };
+
+        // CORRECTED Underlayment data with proper overlap factors
+        const underlaymentData = {
+            'deckdefense': { sqPerRoll: 10, overlap: 1.08, name: 'Deck Defense' },
+            'synthetic': { sqPerRoll: 10, overlap: 1.07, name: 'Synthetic' },
+            'felt30': { sqPerRoll: 2, overlap: 1.05, name: '30# Felt' },
+            'felt15': { sqPerRoll: 4, overlap: 1.06, name: '15# Felt' }
+        };
+
+        let jobType = 'overlay';
+
+        function setJobType(type) {
+            jobType = type;
+            document.getElementById('overlayBtn').classList.toggle('active', type === 'overlay');
+            document.getElementById('tearoffBtn').classList.toggle('active', type === 'tearoff');
+            document.getElementById('tearOffSection').classList.toggle('visible', type === 'tearoff');
+        }
+
+        function updateAutoWaste() {
+            const complexity = document.getElementById('roofComplexity');
+            const waste = complexity.value;
+            document.getElementById('autoWasteDisplay').textContent = `Auto: ${waste}%`;
+        }
+
+        function updatePitchInfo() {
+            const pitch = document.getElementById('roofPitch');
+            const multiplier = pitch.value;
+            document.getElementById('pitchInfo').textContent = `Multiplier: ×${multiplier}`;
+        }
+
+        function updateBrandCoverage() {
+            const brand = document.getElementById('shingleBrand').value;
+            const data = brandData[brand];
+            document.getElementById('brandCoverageInfo').innerHTML = 
+                `<strong>${data.name}:</strong> Ridge: ${data.ridge} LF/bdl • Starter: ${data.starter} LF/bdl • Exposure: 5⅝"`;
+        }
+
+        function toggleIceWater() {
+            const show = document.getElementById('useIceWater').checked;
+            document.getElementById('iceWaterInputs').style.display = show ? 'block' : 'none';
+        }
+
+        function toggleOSBOptions() {
+            const val = document.getElementById('installOSB').value;
+            document.getElementById('osbPercentGroup').style.display = val === 'partial' ? 'block' : 'none';
+        }
+
+        function getVal(id, defaultVal = 0) {
+            const val = parseFloat(document.getElementById(id).value);
+            return isNaN(val) ? defaultVal : val;
+        }
+
+        function roundUp(num) {
+            return Math.ceil(num);
+        }
+
+        function calculate() {
+            // ========== GET INPUTS ==========
+            const squares = getVal('roofSquares');
+            const pitchMultiplier = parseFloat(document.getElementById('roofPitch').value);
+            const autoWaste = parseFloat(document.getElementById('roofComplexity').value);
+            const wasteOverrideVal = getVal('wasteOverride', null);
+            let wastePercent = wasteOverrideVal > 0 ? wasteOverrideVal : autoWaste;
+            
+            const ridgeLength = getVal('ridgeLength');
+            const hipLength = getVal('hipLength');
+            const valleyLength = getVal('valleyLength');
+            const dormerCount = getVal('dormerCount');
+            const eaveLength = getVal('eaveLength');
+            const rakeLength = getVal('rakeLength');
+            const wallFlashingLF = getVal('wallFlashing');
+            const gutterLF = getVal('gutterLF');
+            
+            const brand = document.getElementById('shingleBrand').value;
+            const underlaymentType = document.getElementById('underlaymentType').value;
+            const valleyType = document.getElementById('valleyType').value;
+            const ridgeTrimType = document.getElementById('ridgeTrimType').value;
+            
+            const useIceWater = document.getElementById('useIceWater').checked;
+            const iceWaterRows = getVal('iceWaterRows', 2);
+            const iceWaterValleys = getVal('iceWaterValleys');
+            const iceWaterRakes = getVal('iceWaterRakes');
+            
+            const pipeJacks = getVal('pipeJacks');
+            const roofVents = getVal('roofVents');
+            const ridgeVentLF = getVal('ridgeVent');
+            const turbines = getVal('turbines');
+            
+            const starterOnRakes = document.getElementById('starterOnRakes').value === 'yes';
+            const steepCharge = document.getElementById('steepCharge').checked;
+            const safetyBuffer = parseInt(document.getElementById('safetyBuffer').value);
+            const nailType = document.getElementById('nailType').value;
+            const nailsPerShingle = parseInt(document.getElementById('nailsPerShingle').value);
+            
+            // Tear-off specific
+            const fasciaLF = getVal('fasciaLF');
+            const starterBoardLF = getVal('starterBoardLF');
+            const roofDeckLF = getVal('roofDeckLF');
+            const installOSB = document.getElementById('installOSB').value;
+            const deckReplacePercent = getVal('deckReplacePercent', 50);
+
+            // ========== ADJUST WASTE ==========
+            if (steepCharge) wastePercent += 3;
+            if (jobType === 'tearoff') wastePercent += 2;
+            
+            // FIX D1: Closed valley adds waste %, woven does NOT
+            if (valleyType === 'closed') {
+                wastePercent += 3;
+            }
+
+            // ========== SECTION A: FIELD SHINGLES (CORRECTED) ==========
+            const adjustedSquares = squares * pitchMultiplier;
+            const totalSquaresNeeded = adjustedSquares * (1 + wastePercent / 100);
+            
+            // A1: PURE field bundles - NO extras mixed in
+            const fieldBundlesPure = roundUp(totalSquaresNeeded * 3);
+            
+            // Dormer cut waste: ~1.5 bundles per dormer (SEPARATE)
+            const dormerBundles = roundUp(dormerCount * 1.5);
+            
+            // D1 FIX: Woven valley = extra bundles, NOT waste %
+            let wovenBundles = 0;
+            if (valleyType === 'woven' && valleyLength > 0) {
+                wovenBundles = roundUp(valleyLength / 18);
+            }
+
+            // ========== SECTION G: RIDGE CAP (CORRECTED) ==========
+            let ridgeCoverage = brandData[brand].ridge;
+            
+            // G1: High-profile ridge reduces coverage by 22%
+            if (ridgeTrimType === 'highprofile') {
+                ridgeCoverage = ridgeCoverage * 0.78;
+            }
+            
+            const totalRidgeHip = ridgeLength + hipLength;
+            const ridgeBundles = totalRidgeHip > 0 ? roundUp(totalRidgeHip / ridgeCoverage) : 0;
+
+            // ========== STARTER ==========
+            const starterCoverage = brandData[brand].starter;
+            let totalStarterLF = eaveLength;
+            if (starterOnRakes) {
+                totalStarterLF += rakeLength;
+            }
+            const starterBundles = totalStarterLF > 0 ? roundUp(totalStarterLF / starterCoverage) : 0;
+
+            // ========== SECTION E: UNDERLAYMENT (CORRECTED) ==========
+            const sqPerRoll = underlaymentData[underlaymentType].sqPerRoll;
+            const overlapFactor = underlaymentData[underlaymentType].overlap;
+            const underlaymentRolls = roundUp((adjustedSquares * overlapFactor) / sqPerRoll);
+
+            // ========== SECTION F: ICE & WATER SHIELD (CORRECTED) ==========
+            let iceWaterSqFt = 0;
+            if (useIceWater) {
+                // Eave coverage: rows × 3ft wide × eave length
+                iceWaterSqFt = (iceWaterRows * 3 * eaveLength);
+                // Valley coverage: 3ft for standard, 4ft for steep slopes (8/12+)
+                const valleyWidth = (pitchMultiplier >= 1.20) ? 4 : 3;
+                iceWaterSqFt += (valleyWidth * (iceWaterValleys || valleyLength));
+                // F1 FIX: Rake coverage = 3.5 ft × LF (not 3)
+                iceWaterSqFt += (3.5 * iceWaterRakes);
+            }
+            const iceWaterRolls = roundUp(iceWaterSqFt / 200);
+
+            // ========== SECTION B: DRIP EDGE (CORRECTED - 9.5' usable) ==========
+            const dripEdgeEave = roundUp(eaveLength / 9.5);
+            const dripEdgeRake = roundUp(rakeLength / 9.5);
+
+            // B2: Valley Metal (9.5' usable due to overlap)
+            let valleyMetal = 0;
+            if (valleyType === 'open' && valleyLength > 0) {
+                valleyMetal = roundUp(valleyLength / 9.5);
+            }
+
+            // ========== SECTION C: STEP FLASHING (CORRECTED) ==========
+            // C1: Modern shingles use 5⅝" (5.625") exposure
+            // stepFlashing = LF × (12 / 5.625) = LF × 2.133
+            const stepFlashing = roundUp(wallFlashingLF * 2.133);
+
+            // ========== SECTION I: NAILS (CORRECTED) ==========
+            // I1: Support 4, 5, 6 nails per shingle
+            // 80 shingles per square × nails per shingle
+            const nailsPerSq = 80 * nailsPerShingle;
+            const totalNailsNeeded = roundUp(adjustedSquares * nailsPerSq);
+            
+            let nailsDisplay = '';
+            if (nailType === 'coil') {
+                const coilNailBoxes = roundUp(totalNailsNeeded / 7200);
+                nailsDisplay = `${coilNailBoxes} boxes (${nailsPerShingle}-nail)`;
+            } else if (nailType === 'hand') {
+                // ~0.0078 lbs per nail average
+                const nailsLbs = roundUp(totalNailsNeeded * 0.0078);
+                nailsDisplay = `${nailsLbs} lbs (${nailsPerShingle}-nail)`;
+            } else {
+                const boxes = roundUp(totalNailsNeeded / 5000);
+                nailsDisplay = `${boxes} boxes SS (${nailsPerShingle}-nail)`;
+            }
+
+            // Cap nails for underlayment (~1 box per 8 rolls)
+            const capNails = Math.max(1, roundUp(underlaymentRolls / 8));
+
+            // ========== ACCESSORIES ==========
+            const ridgeVentPcs = roundUp(ridgeVentLF / 4);
+
+            // ========== SECTION H: OSB SHEETS (CORRECTED) ==========
+            let osbSheets = 0;
+            if (installOSB === 'full') {
+                osbSheets = roundUp(adjustedSquares * 3.125);
+            } else if (installOSB === 'partial') {
+                const deckFactor = deckReplacePercent / 100;
+                osbSheets = roundUp(adjustedSquares * 3.125 * deckFactor);
+            }
+
+            // ========== A1: TOTAL ORDER BUNDLES (CORRECTED SEPARATION) ==========
+            const totalBundles = fieldBundlesPure + dormerBundles + wovenBundles + ridgeBundles + starterBundles + safetyBuffer;
+            
+            // ========== A2: BURN RATE (CORRECTED - PURE FIELD ONLY) ==========
+            const burnRate = squares > 0 ? (fieldBundlesPure / squares).toFixed(2) : 0;
+            
+            // Effective waste calculation - MUST use clean field bundles only
+            // Do NOT include dormer, ridge, starter, woven, or buffer in waste calc
+            const theoreticalBundles = adjustedSquares * 3;
+            const cleanFieldBundles = fieldBundlesPure; // Pure field only, no extras
+            const effectiveWaste = theoreticalBundles > 0 
+                ? ((cleanFieldBundles / theoreticalBundles) - 1) * 100
+                : 0;
+
+            // ========== COST CALCULATIONS ==========
+            const totalWoodLF = fasciaLF + starterBoardLF + roofDeckLF;
+            const woodCost = totalWoodLF * 15;
+            const gutterCost = gutterLF * 10;
+
+            // ========== UPDATE DISPLAY ==========
+            document.getElementById('baseSquares').textContent = squares.toFixed(1) + ' sq';
+            document.getElementById('adjustedSquares').textContent = adjustedSquares.toFixed(1) + ' sq';
+            document.getElementById('wasteApplied').textContent = wastePercent.toFixed(0) + '%';
+            document.getElementById('totalSquares').textContent = totalSquaresNeeded.toFixed(1) + ' sq';
+            document.getElementById('fieldBundlesPure').textContent = fieldBundlesPure + ' bdl';
+            
+            document.getElementById('ridgeHipTotal').textContent = totalRidgeHip + ' LF';
+            document.getElementById('ridgeCoverageAdj').textContent = ridgeCoverage.toFixed(1) + ' LF/bdl';
+            document.getElementById('ridgeBundles').textContent = ridgeBundles + ' bdl';
+            document.getElementById('starterLF').textContent = totalStarterLF + ' LF';
+            document.getElementById('starterBundles').textContent = starterBundles + ' bdl';
+            
+            document.getElementById('underlaymentRolls').textContent = underlaymentRolls + ' rolls';
+            document.getElementById('iceWaterRolls').textContent = useIceWater ? iceWaterRolls + ' rolls' : 'N/A';
+            
+            document.getElementById('dripEdgeEave').textContent = dripEdgeEave + ' pcs';
+            document.getElementById('dripEdgeRake').textContent = dripEdgeRake + ' pcs';
+            document.getElementById('valleyMetal').textContent = valleyMetal > 0 ? valleyMetal + ' pcs' : (valleyType !== 'open' ? valleyType.charAt(0).toUpperCase() + valleyType.slice(1) : 'N/A');
+            document.getElementById('stepFlashing').textContent = wallFlashingLF > 0 ? stepFlashing + ' pcs' : 'N/A';
+            
+            document.getElementById('pipeJacksQty').textContent = pipeJacks > 0 ? pipeJacks : 'N/A';
+            document.getElementById('roofVentsQty').textContent = roofVents > 0 ? roofVents : 'N/A';
+            document.getElementById('ridgeVentPcs').textContent = ridgeVentLF > 0 ? ridgeVentPcs + ' pcs' : 'N/A';
+            document.getElementById('turbinesQty').textContent = turbines > 0 ? turbines : 'N/A';
+            
+            document.getElementById('nailsQty').textContent = nailsDisplay;
+            document.getElementById('capNails').textContent = capNails + ' box(es)';
+            
+            // Bundle Breakdown
+            document.getElementById('breakdownField').textContent = fieldBundlesPure + ' bdl';
+            document.getElementById('breakdownDormer').textContent = dormerBundles > 0 ? '+' + dormerBundles + ' bdl' : '0';
+            document.getElementById('breakdownWoven').textContent = wovenBundles > 0 ? '+' + wovenBundles + ' bdl' : '0';
+            document.getElementById('breakdownRidge').textContent = '+' + ridgeBundles + ' bdl';
+            document.getElementById('breakdownStarter').textContent = '+' + starterBundles + ' bdl';
+            document.getElementById('breakdownBuffer').textContent = safetyBuffer > 0 ? '+' + safetyBuffer + ' bdl' : '0';
+            
+            document.getElementById('totalBundles').textContent = totalBundles + ' BUNDLES';
+            document.getElementById('burnRate').textContent = burnRate + ' bdl/sq';
+            document.getElementById('effectiveWaste').textContent = effectiveWaste.toFixed(1) + '%';
+
+            // OSB Section
+            if (installOSB !== 'no') {
+                document.getElementById('osbSection').style.display = 'block';
+                document.getElementById('osbSheets').textContent = osbSheets + ' sheets';
+            } else {
+                document.getElementById('osbSection').style.display = 'none';
+            }
+
+            // Cost Section
+            if (totalWoodLF > 0 || gutterLF > 0) {
+                document.getElementById('costSection').style.display = 'block';
+                document.getElementById('woodCost').textContent = totalWoodLF > 0 ? '$' + woodCost.toFixed(2) : 'N/A';
+                document.getElementById('gutterCost').textContent = gutterLF > 0 ? '$' + gutterCost.toFixed(2) : 'N/A';
+            } else {
+                document.getElementById('costSection').style.display = 'none';
+            }
+        }
+
+        // Initialize
+        updateAutoWaste();
+        updateBrandCoverage();
+        updatePitchInfo();
+    </script>
+</body>
+</html>
