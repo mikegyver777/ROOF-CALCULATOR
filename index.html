@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -382,6 +383,42 @@
                 </div>
                 <div class="panel-body scroll-panel">
                     
+                    <!-- JOB INFORMATION -->
+                    <div class="section-label">Job Information</div>
+                    
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Customer Name</label>
+                            <input type="text" id="customerName" placeholder="e.g., John Smith">
+                        </div>
+                        <div class="input-group">
+                            <label>Job Number</label>
+                            <input type="text" id="jobNumber" placeholder="e.g., ACC-2024-0145">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Job Address</label>
+                        <input type="text" id="jobAddress" placeholder="e.g., 1234 Main Street, Torrance, CA 90503">
+                    </div>
+
+                    <div class="input-row-3">
+                        <div class="input-group">
+                            <label>Phone</label>
+                            <input type="tel" id="customerPhone" placeholder="(310) 555-1234">
+                        </div>
+                        <div class="input-group">
+                            <label>Project Manager</label>
+                            <input type="text" id="projectManager" placeholder="e.g., Mike R.">
+                        </div>
+                        <div class="input-group">
+                            <label>Date</label>
+                            <input type="date" id="jobDate">
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
                     <!-- JOB TYPE TOGGLE -->
                     <div class="section-label">Job Type</div>
                     <div class="job-type-toggle">
@@ -783,6 +820,35 @@
                     <h2>Material Order Summary</h2>
                 </div>
                 <div class="panel-body scroll-panel">
+
+                    <!-- JOB INFO DISPLAY (for print) -->
+                    <div class="results-section" id="jobInfoDisplay" style="display:none;">
+                        <h3>📋 Job Information</h3>
+                        <div class="result-item">
+                            <span class="result-label">Customer</span>
+                            <span class="result-value" id="displayCustomer">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Address</span>
+                            <span class="result-value" id="displayAddress">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Job #</span>
+                            <span class="result-value" id="displayJobNum">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Phone</span>
+                            <span class="result-value" id="displayPhone">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Project Manager</span>
+                            <span class="result-value" id="displayProjectManager">—</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Date</span>
+                            <span class="result-value" id="displayDate">—</span>
+                        </div>
+                    </div>
                     
                     <div class="results-section">
                         <h3>🏗️ Field Shingles</h3>
@@ -1103,7 +1169,9 @@
             // FIX #13: Prevent negative waste override
             if (wasteOverrideVal < 0) wasteOverrideVal = -1; // Use auto
             
-            let wastePercent = wasteOverrideVal >= 0 ? wasteOverrideVal : autoWaste;
+            // FIXED: Override = TOTAL locked waste (no additions applied)
+            const hasWasteOverride = (wasteOverrideVal >= 0);
+            let wastePercent = hasWasteOverride ? wasteOverrideVal : autoWaste;
             
             const ridgeLength = getVal('ridgeLength');
             const hipLength = getVal('hipLength');
@@ -1144,13 +1212,15 @@
             const installOSB = document.getElementById('installOSB').value;
             const deckReplacePercent = getVal('deckReplacePercent', 50);
 
-            // ========== ADJUST WASTE ==========
-            if (steepCharge) wastePercent += 3;
-            if (jobType === 'tearoff') wastePercent += 2;
-            
-            // Closed valley adds waste %, woven does NOT (handled separately)
-            if (valleyType === 'closed') {
-                wastePercent += 3;
+            // ========== ADJUST WASTE (only if NO override) ==========
+            if (!hasWasteOverride) {
+                if (steepCharge) wastePercent += 3;
+                if (jobType === 'tearoff') wastePercent += 2;
+                
+                // Closed valley adds waste %, woven does NOT (handled separately)
+                if (valleyType === 'closed') {
+                    wastePercent += 3;
+                }
             }
 
             // ========== FIELD SHINGLES ==========
@@ -1235,9 +1305,12 @@
             stepFlashing += (dormerCount * 12);  // 12 pcs minimum per dormer
 
             // ========== FIX #6: NAILS - Correct shingles per square ==========
+            // Include ridge & starter bundles (convert to sq equivalent: bundles / 3)
             const shinglesPerSq = brandInfo.shinglesPerSq;  // Brand-specific (64-66)
             const nailsPerSq = shinglesPerSq * nailsPerShingle;
-            const totalNailsNeeded = roundUp(nailsPerSq * adjustedSquares);
+            const ridgeStarterSqEquivalent = (ridgeBundles + starterBundles) / 3;
+            const totalSqForNails = adjustedSquares + ridgeStarterSqEquivalent;
+            const totalNailsNeeded = roundUp(nailsPerSq * totalSqForNails);
             
             let nailsDisplay = '';
             if (nailType === 'coil') {
@@ -1282,6 +1355,25 @@
             const totalWoodLF = fasciaLF + starterBoardLF + roofDeckLF;
             const woodCost = totalWoodLF * 15;
             const gutterCost = gutterLF * 10;
+
+            // ========== UPDATE JOB INFO DISPLAY ==========
+            const customerName = document.getElementById('customerName').value;
+            const jobNumber = document.getElementById('jobNumber').value;
+            const jobAddress = document.getElementById('jobAddress').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const projectManager = document.getElementById('projectManager').value;
+            const jobDate = document.getElementById('jobDate').value;
+            
+            // Show job info section if any field is filled
+            const hasJobInfo = customerName || jobNumber || jobAddress || customerPhone || projectManager || jobDate;
+            document.getElementById('jobInfoDisplay').style.display = hasJobInfo ? 'block' : 'none';
+            
+            document.getElementById('displayCustomer').textContent = customerName || '—';
+            document.getElementById('displayAddress').textContent = jobAddress || '—';
+            document.getElementById('displayJobNum').textContent = jobNumber || '—';
+            document.getElementById('displayPhone').textContent = customerPhone || '—';
+            document.getElementById('displayProjectManager').textContent = projectManager || '—';
+            document.getElementById('displayDate').textContent = jobDate || '—';
 
             // ========== UPDATE DISPLAY ==========
             document.getElementById('baseSquares').textContent = squares.toFixed(1) + ' sq';
@@ -1350,6 +1442,10 @@
         updateAutoWaste();
         updateBrandCoverage();
         updatePitchInfo();
+        
+        // Set default date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('jobDate').value = today;
 
         // Set up event listeners for toggles
         document.getElementById('useIceWater').addEventListener('change', toggleIceWater);
