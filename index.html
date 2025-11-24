@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -358,13 +357,202 @@
         }
 
         @media print {
-            body { background: white; color: black; }
-            .panel { break-inside: avoid; border: 1px solid #ccc; }
-            .calculate-btn, .print-btn { display: none; }
-            .result-value { color: black; }
-            .result-value.highlight { color: #ea580c; }
-            .scroll-panel { max-height: none; overflow: visible; }
+            @page { 
+                size: letter; 
+                margin: 0.4in; 
+            }
+            
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            
+            body { 
+                background: white !important; 
+                color: black !important; 
+                font-size: 10px !important;
+                line-height: 1.2 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            
+            .container { 
+                max-width: 100% !important; 
+                padding: 0 !important; 
+            }
+            
+            /* Hide input panel entirely */
+            .main-grid > .panel:first-child { display: none !important; }
+            
+            /* Make results panel full width */
+            .main-grid { display: block !important; }
+            
+            .main-grid > .panel:last-child {
+                width: 100% !important;
+                border: none !important;
+                background: white !important;
+            }
+            
+            /* Hide screen header */
+            header { display: none !important; }
+            .panel-header { display: none !important; }
+            .panel-body { padding: 0 !important; }
+            .scroll-panel { max-height: none !important; overflow: visible !important; }
+            
+            /* Print header */
+            .print-header {
+                display: block !important;
+                text-align: center;
+                border-bottom: 2px solid #000;
+                padding-bottom: 8px;
+                margin-bottom: 10px;
+            }
+            
+            .print-header h1 {
+                font-size: 16px !important;
+                font-weight: bold !important;
+                color: black !important;
+                margin: 0 !important;
+                letter-spacing: 1px;
+            }
+            
+            .print-header p {
+                font-size: 9px !important;
+                color: #444 !important;
+                margin: 2px 0 0 0 !important;
+            }
+            
+            /* Job info - compact inline layout */
+            #jobInfoDisplay { 
+                display: block !important; 
+                border: 1px solid #000 !important;
+                padding: 8px 10px !important;
+                margin-bottom: 10px !important;
+                background: #f9f9f9 !important;
+            }
+            
+            #jobInfoDisplay h3 { 
+                display: none !important; 
+            }
+            
+            #jobInfoDisplay .result-item {
+                display: inline-block !important;
+                width: 32% !important;
+                padding: 2px 0 !important;
+                border: none !important;
+            }
+            
+            /* Compact sections - two column grid */
+            .results-section { 
+                display: inline-block !important;
+                vertical-align: top !important;
+                width: 48% !important;
+                margin: 0 1% 8px 0 !important;
+                break-inside: avoid !important;
+            }
+            
+            .results-section h3 { 
+                font-size: 9px !important; 
+                font-weight: bold !important;
+                padding: 3px 5px !important;
+                margin-bottom: 4px !important;
+                color: white !important;
+                background: #333 !important;
+                border: none !important;
+            }
+            
+            .result-item { 
+                padding: 1px 0 !important; 
+                border-bottom: 1px dotted #ccc !important;
+                font-size: 9px !important;
+            }
+            
+            .result-item:last-child { border-bottom: none !important; }
+            
+            .result-label { font-size: 9px !important; color: #333 !important; }
+            .result-value { font-size: 10px !important; font-weight: 600 !important; color: black !important; }
+            .result-value.highlight { color: #000 !important; font-size: 11px !important; font-weight: bold !important; }
+            .result-value.green { color: #166534 !important; }
+            
+            /* Total box - full width, prominent */
+            .total-box {
+                display: block !important;
+                width: 100% !important;
+                padding: 10px !important;
+                margin: 10px 0 !important;
+                border: 2px solid #000 !important;
+                background: #eee !important;
+            }
+            
+            .total-box h3 {
+                font-size: 11px !important;
+                color: #000 !important;
+                background: none !important;
+                border-bottom: 1px solid #000 !important;
+                padding: 0 0 3px 0 !important;
+                margin-bottom: 5px !important;
+            }
+            
+            .total-box .result-value.highlight {
+                font-size: 14px !important;
+                font-weight: bold !important;
+            }
+            
+            /* Breakdown box - compact */
+            .breakdown-box {
+                display: inline-block !important;
+                width: 48% !important;
+                vertical-align: top !important;
+                padding: 6px !important;
+                margin: 5px 1% 5px 0 !important;
+                border: 1px solid #666 !important;
+                background: #fafafa !important;
+            }
+            
+            .breakdown-box h3 {
+                font-size: 9px !important;
+                background: #666 !important;
+            }
+            
+            /* Cost section - compact */
+            .cost-section {
+                display: inline-block !important;
+                width: 48% !important;
+                vertical-align: top !important;
+                padding: 6px !important;
+                margin: 5px 0 !important;
+                border: 1px solid #666 !important;
+                background: #fafafa !important;
+            }
+            
+            .cost-section h3 {
+                font-size: 9px !important;
+                background: #666 !important;
+                color: white !important;
+            }
+            
+            /* Hide OSB if empty */
+            #osbSection[style*="none"] { display: none !important; }
+            
+            /* Hide buttons */
+            .calculate-btn, .print-btn { display: none !important; }
+            
+            /* Signature area */
+            .print-signature {
+                display: block !important;
+                margin-top: 15px;
+                padding-top: 10px;
+                border-top: 1px solid #999;
+                font-size: 9px !important;
+            }
+            
+            .print-signature-line {
+                display: inline-block;
+                width: 150px;
+                border-bottom: 1px solid #333;
+                margin: 0 10px;
+            }
         }
+        
+        /* Hide print-only elements on screen */
+        .print-header, .print-signature { display: none; }
     </style>
 </head>
 <body>
@@ -821,6 +1009,13 @@
                 </div>
                 <div class="panel-body scroll-panel">
 
+                    <!-- PRINT HEADER (only shows when printing) -->
+                    <div class="print-header">
+                        <h1>ALTA CALIFORNIA CONSTRUCTION</h1>
+                        <p>Contractors License: 1106881 B • 350 Crenshaw Blvd Suite A202, Torrance, CA 90503 • (310) 953-8805</p>
+                        <p style="font-size: 14px; font-weight: bold; margin-top: 8px;">ROOFING MATERIAL ORDER SHEET</p>
+                    </div>
+
                     <!-- JOB INFO DISPLAY (for print) -->
                     <div class="results-section" id="jobInfoDisplay" style="display:none;">
                         <h3>📋 Job Information</h3>
@@ -1024,6 +1219,33 @@
                         <div class="result-item">
                             <span class="result-label">Gutter Replacement ($10/LF)</span>
                             <span class="result-value" id="gutterCost">—</span>
+                        </div>
+                    </div>
+
+                    <!-- PRINT SIGNATURE SECTION (only shows when printing) -->
+                    <div class="print-signature">
+                        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                            <div>
+                                <span>Ordered By:</span>
+                                <span class="print-signature-line"></span>
+                            </div>
+                            <div>
+                                <span>Date:</span>
+                                <span class="print-signature-line" style="width: 120px;"></span>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                            <div>
+                                <span>Approved By:</span>
+                                <span class="print-signature-line"></span>
+                            </div>
+                            <div>
+                                <span>PO #:</span>
+                                <span class="print-signature-line" style="width: 120px;"></span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 10px; border-top: 1px dashed #ccc; font-size: 9px; color: #666; text-align: center;">
+                            Alta California Construction • Contractors License #1106881 B • altacaliforniaconstruction.com
                         </div>
                     </div>
 
