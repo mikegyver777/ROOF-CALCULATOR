@@ -549,6 +549,50 @@
                 border-bottom: 1px solid #333;
                 margin: 0 10px;
             }
+            
+            /* Supplier pricing print styles */
+            #supplierPricingSection {
+                display: block !important;
+                margin-top: 10px !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .supplier-box {
+                display: inline-block !important;
+                width: 48% !important;
+                vertical-align: top !important;
+                padding: 8px !important;
+                margin: 0 1% 10px 0 !important;
+                border: 1px solid #333 !important;
+                background: #fafafa !important;
+            }
+            
+            .supplier-box h3 {
+                font-size: 9px !important;
+                color: #333 !important;
+                background: none !important;
+                border-bottom: 1px solid #666 !important;
+                padding-bottom: 3px !important;
+                margin-bottom: 5px !important;
+            }
+            
+            .savings-box {
+                display: block !important;
+                width: 100% !important;
+                padding: 10px !important;
+                margin-top: 10px !important;
+                border: 2px solid #333 !important;
+                background: #f0f0f0 !important;
+            }
+            
+            .savings-box h3 {
+                color: #333 !important;
+                font-size: 10px !important;
+            }
+            
+            #pricingInputs {
+                display: none !important;
+            }
         }
         
         /* Hide print-only elements on screen */
@@ -996,6 +1040,156 @@
                         <label for="steepCharge">Steep Roof (8/12+) - Extra Material Buffer (+3%)</label>
                     </div>
 
+                    <div class="section-divider"></div>
+
+                    <!-- SUPPLIER PRICING -->
+                    <div class="section-label">💰 Supplier Pricing (per unit)</div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="enablePricing" checked>
+                        <label for="enablePricing">Calculate Material Cost Estimates</label>
+                    </div>
+
+                    <div id="pricingInputs">
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 10px; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; padding: 0 5px;">
+                            <span>Material</span>
+                            <span style="text-align: center;">QXO (Beacon)</span>
+                            <span style="text-align: center;">ABC Supply</span>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Shingle Bundle</span>
+                            <input type="number" id="priceQXO_shingle" value="38.50" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_shingle" value="39.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Ridge Cap Bundle</span>
+                            <input type="number" id="priceQXO_ridge" value="62.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_ridge" value="64.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Starter Bundle</span>
+                            <input type="number" id="priceQXO_starter" value="52.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_starter" value="54.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Underlayment Roll</span>
+                            <input type="number" id="priceQXO_underlayment" value="125.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_underlayment" value="128.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Ice & Water Roll</span>
+                            <input type="number" id="priceQXO_icewater" value="95.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_icewater" value="98.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Drip Edge (10' pc)</span>
+                            <input type="number" id="priceQXO_drip" value="8.50" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_drip" value="8.75" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Valley Metal (10' pc)</span>
+                            <input type="number" id="priceQXO_valley" value="22.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_valley" value="23.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Nail Box (coil)</span>
+                            <input type="number" id="priceQXO_nails" value="48.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_nails" value="50.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Pipe Jack (each)</span>
+                            <input type="number" id="priceQXO_pipejack" value="12.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_pipejack" value="12.50" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Roof Vent (each)</span>
+                            <input type="number" id="priceQXO_vent" value="18.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_vent" value="19.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Ridge Vent (4' pc)</span>
+                            <input type="number" id="priceQXO_ridgevent" value="14.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_ridgevent" value="14.50" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Step Flashing (each)</span>
+                            <input type="number" id="priceQXO_stepflash" value="0.85" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_stepflash" value="0.90" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">OSB Sheet (4x8)</span>
+                            <input type="number" id="priceQXO_osb" value="28.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_osb" value="29.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Cap Nails (box)</span>
+                            <input type="number" id="priceQXO_capnails" value="32.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_capnails" value="34.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">O'Hagen/Turbine (each)</span>
+                            <input type="number" id="priceQXO_turbine" value="85.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_turbine" value="89.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Solar Turbine (each)</span>
+                            <input type="number" id="priceQXO_solarturbine" value="145.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_solarturbine" value="150.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Satellite Mount Kit</span>
+                            <input type="number" id="priceQXO_satellite" value="35.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_satellite" value="38.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Roof Jack Paint (quart)</span>
+                            <input type="number" id="priceQXO_paint" value="18.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_paint" value="19.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Fascia/Lumber (per LF)</span>
+                            <input type="number" id="priceQXO_lumber" value="4.50" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_lumber" value="4.75" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Gutter (per LF)</span>
+                            <input type="number" id="priceQXO_gutter" value="6.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_gutter" value="6.50" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Dumpster/Haul (per sq)</span>
+                            <input type="number" id="priceQXO_dumpster" value="18.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_dumpster" value="20.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; color: var(--text-secondary);">Satellite Remove (each)</span>
+                            <input type="number" id="priceQXO_satremove" value="25.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                            <input type="number" id="priceABC_satremove" value="25.00" step="0.01" min="0" style="padding: 8px; text-align: center;">
+                        </div>
+                    </div>
+
                     <button class="calculate-btn" onclick="calculate()">⚡ CALCULATE ORDER</button>
 
                 </div>
@@ -1219,6 +1413,220 @@
                         <div class="result-item">
                             <span class="result-label">Gutter Replacement ($10/LF)</span>
                             <span class="result-value" id="gutterCost">—</span>
+                        </div>
+                    </div>
+
+                    <!-- SUPPLIER PRICING COMPARISON -->
+                    <div id="supplierPricingSection" style="display:none; margin-top: 15px;">
+                        <!-- QXO (Beacon) Pricing -->
+                        <div class="supplier-box" style="background: rgba(59, 130, 246, 0.08); border: 2px solid var(--accent-blue); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                            <h3 style="color: var(--accent-blue); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--accent-blue);">
+                                🏪 QXO (Beacon Building Products)
+                            </h3>
+                            <div class="result-item">
+                                <span class="result-label">Shingle Bundles (All)</span>
+                                <span class="result-value" id="qxoFieldCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Ridge Caps</span>
+                                <span class="result-value" id="qxoRidgeCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Starter Strip</span>
+                                <span class="result-value" id="qxoStarterCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Underlayment</span>
+                                <span class="result-value" id="qxoUnderlaymentCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Ice & Water</span>
+                                <span class="result-value" id="qxoIceWaterCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Drip Edge</span>
+                                <span class="result-value" id="qxoDripCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Valley Metal</span>
+                                <span class="result-value" id="qxoValleyCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Nails</span>
+                                <span class="result-value" id="qxoNailsCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Cap Nails</span>
+                                <span class="result-value" id="qxoCapNailsCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Pipe Jacks/Vents</span>
+                                <span class="result-value" id="qxoAccessoriesCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Ridge Vent</span>
+                                <span class="result-value" id="qxoRidgeVentCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Step Flashing</span>
+                                <span class="result-value" id="qxoStepFlashCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">O'Hagen/Turbines</span>
+                                <span class="result-value" id="qxoTurbineCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Solar Turbines</span>
+                                <span class="result-value" id="qxoSolarCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Satellite Mounts</span>
+                                <span class="result-value" id="qxoSatelliteCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Roof Jack Paint</span>
+                                <span class="result-value" id="qxoPaintCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">OSB Sheeting</span>
+                                <span class="result-value" id="qxoOSBCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Lumber/Fascia</span>
+                                <span class="result-value" id="qxoLumberCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Gutters</span>
+                                <span class="result-value" id="qxoGutterCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Dumpster/Haul</span>
+                                <span class="result-value" id="qxoDumpsterCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Satellite Remove</span>
+                                <span class="result-value" id="qxoSatRemoveCost">—</span>
+                            </div>
+                            <div class="result-item" style="margin-top: 8px; padding-top: 8px; border-top: 2px solid var(--accent-blue);">
+                                <span class="result-label" style="font-weight: 700; font-size: 0.95rem;">QXO TOTAL</span>
+                                <span class="result-value highlight" style="font-size: 1.3rem; color: var(--accent-blue);" id="qxoTotal">—</span>
+                            </div>
+                        </div>
+
+                        <!-- ABC Supply Pricing -->
+                        <div class="supplier-box" style="background: rgba(239, 68, 68, 0.08); border: 2px solid var(--accent-red); border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+                            <h3 style="color: var(--accent-red); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--accent-red);">
+                                🏪 ABC Supply Co.
+                            </h3>
+                            <div class="result-item">
+                                <span class="result-label">Shingle Bundles (All)</span>
+                                <span class="result-value" id="abcFieldCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Ridge Caps</span>
+                                <span class="result-value" id="abcRidgeCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Starter Strip</span>
+                                <span class="result-value" id="abcStarterCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Underlayment</span>
+                                <span class="result-value" id="abcUnderlaymentCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Ice & Water</span>
+                                <span class="result-value" id="abcIceWaterCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Drip Edge</span>
+                                <span class="result-value" id="abcDripCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Valley Metal</span>
+                                <span class="result-value" id="abcValleyCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Nails</span>
+                                <span class="result-value" id="abcNailsCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Cap Nails</span>
+                                <span class="result-value" id="abcCapNailsCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Pipe Jacks/Vents</span>
+                                <span class="result-value" id="abcAccessoriesCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Ridge Vent</span>
+                                <span class="result-value" id="abcRidgeVentCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Step Flashing</span>
+                                <span class="result-value" id="abcStepFlashCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">O'Hagen/Turbines</span>
+                                <span class="result-value" id="abcTurbineCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Solar Turbines</span>
+                                <span class="result-value" id="abcSolarCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Satellite Mounts</span>
+                                <span class="result-value" id="abcSatelliteCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Roof Jack Paint</span>
+                                <span class="result-value" id="abcPaintCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">OSB Sheeting</span>
+                                <span class="result-value" id="abcOSBCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Lumber/Fascia</span>
+                                <span class="result-value" id="abcLumberCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Gutters</span>
+                                <span class="result-value" id="abcGutterCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Dumpster/Haul</span>
+                                <span class="result-value" id="abcDumpsterCost">—</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Satellite Remove</span>
+                                <span class="result-value" id="abcSatRemoveCost">—</span>
+                            </div>
+                            <div class="result-item" style="margin-top: 8px; padding-top: 8px; border-top: 2px solid var(--accent-red);">
+                                <span class="result-label" style="font-weight: 700; font-size: 0.95rem;">ABC TOTAL</span>
+                                <span class="result-value highlight" style="font-size: 1.3rem; color: var(--accent-red);" id="abcTotal">—</span>
+                            </div>
+                        </div>
+
+                        <!-- SAVINGS COMPARISON -->
+                        <div class="savings-box" style="background: rgba(34, 197, 94, 0.1); border: 2px solid var(--accent-green); border-radius: 8px; padding: 15px; text-align: center;">
+                            <h3 style="color: var(--accent-green); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">
+                                💵 SAVINGS COMPARISON
+                            </h3>
+                            <div style="display: flex; justify-content: space-around; align-items: center;">
+                                <div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">BEST PRICE</div>
+                                    <div style="font-size: 1.1rem; font-weight: 700; color: var(--accent-green);" id="bestSupplier">—</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">YOU SAVE</div>
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-green);" id="savingsAmount">—</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; color: var(--text-secondary);">DIFFERENCE</div>
+                                    <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);" id="savingsPercent">—</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1654,6 +2062,225 @@
             } else {
                 document.getElementById('costSection').style.display = 'none';
             }
+
+            // ========== SUPPLIER PRICING CALCULATIONS ==========
+            const enablePricing = document.getElementById('enablePricing').checked;
+            
+            if (enablePricing) {
+                document.getElementById('supplierPricingSection').style.display = 'block';
+                
+                // Get pricing inputs - QXO (Beacon)
+                const qxoShingle = getVal('priceQXO_shingle', 38.50);
+                const qxoRidge = getVal('priceQXO_ridge', 62.00);
+                const qxoStarter = getVal('priceQXO_starter', 52.00);
+                const qxoUnderlayment = getVal('priceQXO_underlayment', 125.00);
+                const qxoIceWater = getVal('priceQXO_icewater', 95.00);
+                const qxoDrip = getVal('priceQXO_drip', 8.50);
+                const qxoValley = getVal('priceQXO_valley', 22.00);
+                const qxoNails = getVal('priceQXO_nails', 48.00);
+                const qxoPipeJack = getVal('priceQXO_pipejack', 12.00);
+                const qxoVent = getVal('priceQXO_vent', 18.00);
+                const qxoRidgeVent = getVal('priceQXO_ridgevent', 14.00);
+                const qxoStepFlash = getVal('priceQXO_stepflash', 0.85);
+                const qxoOSB = getVal('priceQXO_osb', 28.00);
+                const qxoCapNails = getVal('priceQXO_capnails', 32.00);
+                const qxoTurbine = getVal('priceQXO_turbine', 85.00);
+                const qxoSolarTurbine = getVal('priceQXO_solarturbine', 145.00);
+                const qxoSatellite = getVal('priceQXO_satellite', 35.00);
+                const qxoPaint = getVal('priceQXO_paint', 18.00);
+                const qxoLumber = getVal('priceQXO_lumber', 4.50);
+                const qxoGutter = getVal('priceQXO_gutter', 6.00);
+                
+                // Get pricing inputs - ABC Supply
+                const abcShingle = getVal('priceABC_shingle', 39.00);
+                const abcRidge = getVal('priceABC_ridge', 64.00);
+                const abcStarter = getVal('priceABC_starter', 54.00);
+                const abcUnderlayment = getVal('priceABC_underlayment', 128.00);
+                const abcIceWater = getVal('priceABC_icewater', 98.00);
+                const abcDrip = getVal('priceABC_drip', 8.75);
+                const abcValley = getVal('priceABC_valley', 23.00);
+                const abcNails = getVal('priceABC_nails', 50.00);
+                const abcPipeJack = getVal('priceABC_pipejack', 12.50);
+                const abcVent = getVal('priceABC_vent', 19.00);
+                const abcRidgeVent = getVal('priceABC_ridgevent', 14.50);
+                const abcStepFlash = getVal('priceABC_stepflash', 0.90);
+                const abcOSB = getVal('priceABC_osb', 29.00);
+                const abcCapNails = getVal('priceABC_capnails', 34.00);
+                const abcTurbine = getVal('priceABC_turbine', 89.00);
+                const abcSolarTurbine = getVal('priceABC_solarturbine', 150.00);
+                const abcSatellite = getVal('priceABC_satellite', 38.00);
+                const abcPaint = getVal('priceABC_paint', 19.00);
+                const abcLumber = getVal('priceABC_lumber', 4.75);
+                const abcGutter = getVal('priceABC_gutter', 6.50);
+                
+                // Get quantities for new items
+                const solarTurbines = getVal('solarTurbines');
+                const satelliteReplace = getVal('satelliteReplace');
+                const satelliteRemove = getVal('satelliteRemove');
+                const paintJacks = document.getElementById('paintJacks').checked;
+                const haulAway = document.getElementById('haulAway').value === 'yes';
+                
+                // Get dumpster and satellite remove prices
+                const qxoDumpster = getVal('priceQXO_dumpster', 18.00);
+                const qxoSatRemove = getVal('priceQXO_satremove', 25.00);
+                const abcDumpster = getVal('priceABC_dumpster', 20.00);
+                const abcSatRemove = getVal('priceABC_satremove', 25.00);
+                
+                // Calculate QXO costs
+                // FIXED: Price ALL shingle bundles (field + dormer + woven + safety buffer)
+                const allShingleBundles = fieldBundlesPure + dormerBundles + wovenBundles + safetyBuffer;
+                const qxoFieldCost = allShingleBundles * qxoShingle;
+                const qxoRidgeCost = ridgeBundles * qxoRidge;
+                const qxoStarterCost = starterBundles * qxoStarter;
+                const qxoUnderlaymentCost = underlaymentRolls * qxoUnderlayment;
+                const qxoIceWaterCost = iceWaterRolls * qxoIceWater;
+                const qxoDripCost = (dripEdgeEave + dripEdgeRake) * qxoDrip;
+                const qxoValleyCost = valleyMetal * qxoValley;
+                
+                // Nail box count (extract from nailsDisplay)
+                let nailBoxCount = 1;
+                if (nailType === 'coil') {
+                    nailBoxCount = roundUp(totalNailsNeeded / 7200);
+                } else if (nailType === 'hand') {
+                    nailBoxCount = roundUp(totalNailsNeeded * 0.0078 / 50); // ~50 lbs per box
+                } else {
+                    nailBoxCount = roundUp(totalNailsNeeded / 5000);
+                }
+                const qxoNailsCost = nailBoxCount * qxoNails;
+                
+                // Individual accessory costs for QXO
+                const qxoPipeJackCost = pipeJacks * qxoPipeJack;
+                const qxoVentCost = roofVents * qxoVent;
+                const qxoRidgeVentCost = ridgeVentPcs * qxoRidgeVent;
+                const qxoStepFlashCost = stepFlashing * qxoStepFlash;
+                const qxoAccessoriesCost = qxoPipeJackCost + qxoVentCost;
+                
+                // New item costs for QXO
+                const qxoCapNailsCost = capNails * qxoCapNails;
+                const qxoTurbineCost = turbines * qxoTurbine;
+                const qxoSolarCost = solarTurbines * qxoSolarTurbine;
+                const qxoSatelliteCost = satelliteReplace * qxoSatellite;
+                const qxoPaintCost = paintJacks ? Math.ceil(pipeJacks / 4) * qxoPaint : 0; // 1 quart per ~4 jacks
+                const qxoOSBCost = osbSheets * qxoOSB;
+                const qxoLumberCost = totalWoodLF * qxoLumber;
+                const qxoGutterCost = gutterLF * qxoGutter;
+                const qxoDumpsterCost = haulAway ? (squares * qxoDumpster) : 0;
+                const qxoSatRemoveCost = satelliteRemove * qxoSatRemove;
+                
+                // QXO Total
+                const qxoTotalCost = qxoFieldCost + qxoRidgeCost + qxoStarterCost + 
+                                     qxoUnderlaymentCost + qxoIceWaterCost + qxoDripCost + 
+                                     qxoValleyCost + qxoNailsCost + qxoCapNailsCost +
+                                     qxoAccessoriesCost + qxoRidgeVentCost + qxoStepFlashCost +
+                                     qxoTurbineCost + qxoSolarCost + qxoSatelliteCost + qxoSatRemoveCost +
+                                     qxoPaintCost + qxoOSBCost + qxoLumberCost + qxoGutterCost + qxoDumpsterCost;
+                
+                // Calculate ABC costs
+                const abcFieldCost = allShingleBundles * abcShingle;
+                const abcRidgeCost = ridgeBundles * abcRidge;
+                const abcStarterCost = starterBundles * abcStarter;
+                const abcUnderlaymentCost = underlaymentRolls * abcUnderlayment;
+                const abcIceWaterCost = iceWaterRolls * abcIceWater;
+                const abcDripCost = (dripEdgeEave + dripEdgeRake) * abcDrip;
+                const abcValleyCost = valleyMetal * abcValley;
+                const abcNailsCost = nailBoxCount * abcNails;
+                
+                // Individual accessory costs for ABC
+                const abcPipeJackCost = pipeJacks * abcPipeJack;
+                const abcVentCost = roofVents * abcVent;
+                const abcRidgeVentCost = ridgeVentPcs * abcRidgeVent;
+                const abcStepFlashCost = stepFlashing * abcStepFlash;
+                const abcAccessoriesCost = abcPipeJackCost + abcVentCost;
+                
+                // New item costs for ABC
+                const abcCapNailsCost = capNails * abcCapNails;
+                const abcTurbineCost = turbines * abcTurbine;
+                const abcSolarCost = solarTurbines * abcSolarTurbine;
+                const abcSatelliteCost = satelliteReplace * abcSatellite;
+                const abcPaintCost = paintJacks ? Math.ceil(pipeJacks / 4) * abcPaint : 0;
+                const abcOSBCost = osbSheets * abcOSB;
+                const abcLumberCost = totalWoodLF * abcLumber;
+                const abcGutterCost = gutterLF * abcGutter;
+                const abcDumpsterCost = haulAway ? (squares * abcDumpster) : 0;
+                const abcSatRemoveCost = satelliteRemove * abcSatRemove;
+                
+                // ABC Total
+                const abcTotalCost = abcFieldCost + abcRidgeCost + abcStarterCost + 
+                                     abcUnderlaymentCost + abcIceWaterCost + abcDripCost + 
+                                     abcValleyCost + abcNailsCost + abcCapNailsCost +
+                                     abcAccessoriesCost + abcRidgeVentCost + abcStepFlashCost +
+                                     abcTurbineCost + abcSolarCost + abcSatelliteCost + abcSatRemoveCost +
+                                     abcPaintCost + abcOSBCost + abcLumberCost + abcGutterCost + abcDumpsterCost;
+                
+                // Update QXO display
+                document.getElementById('qxoFieldCost').textContent = '$' + qxoFieldCost.toFixed(2);
+                document.getElementById('qxoRidgeCost').textContent = '$' + qxoRidgeCost.toFixed(2);
+                document.getElementById('qxoStarterCost').textContent = '$' + qxoStarterCost.toFixed(2);
+                document.getElementById('qxoUnderlaymentCost').textContent = '$' + qxoUnderlaymentCost.toFixed(2);
+                document.getElementById('qxoIceWaterCost').textContent = useIceWater ? '$' + qxoIceWaterCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoDripCost').textContent = '$' + qxoDripCost.toFixed(2);
+                document.getElementById('qxoValleyCost').textContent = valleyMetal > 0 ? '$' + qxoValleyCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoNailsCost').textContent = '$' + qxoNailsCost.toFixed(2);
+                document.getElementById('qxoCapNailsCost').textContent = '$' + qxoCapNailsCost.toFixed(2);
+                document.getElementById('qxoAccessoriesCost').textContent = '$' + qxoAccessoriesCost.toFixed(2);
+                document.getElementById('qxoRidgeVentCost').textContent = ridgeVentPcs > 0 ? '$' + qxoRidgeVentCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoStepFlashCost').textContent = stepFlashing > 0 ? '$' + qxoStepFlashCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoTurbineCost').textContent = turbines > 0 ? '$' + qxoTurbineCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoSolarCost').textContent = solarTurbines > 0 ? '$' + qxoSolarCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoSatelliteCost').textContent = satelliteReplace > 0 ? '$' + qxoSatelliteCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoPaintCost').textContent = paintJacks ? '$' + qxoPaintCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoOSBCost').textContent = osbSheets > 0 ? '$' + qxoOSBCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoLumberCost').textContent = totalWoodLF > 0 ? '$' + qxoLumberCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoGutterCost').textContent = gutterLF > 0 ? '$' + qxoGutterCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoDumpsterCost').textContent = haulAway ? '$' + qxoDumpsterCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoSatRemoveCost').textContent = satelliteRemove > 0 ? '$' + qxoSatRemoveCost.toFixed(2) : '$0.00';
+                document.getElementById('qxoTotal').textContent = '$' + qxoTotalCost.toFixed(2);
+                
+                // Update ABC display
+                document.getElementById('abcFieldCost').textContent = '$' + abcFieldCost.toFixed(2);
+                document.getElementById('abcRidgeCost').textContent = '$' + abcRidgeCost.toFixed(2);
+                document.getElementById('abcStarterCost').textContent = '$' + abcStarterCost.toFixed(2);
+                document.getElementById('abcUnderlaymentCost').textContent = '$' + abcUnderlaymentCost.toFixed(2);
+                document.getElementById('abcIceWaterCost').textContent = useIceWater ? '$' + abcIceWaterCost.toFixed(2) : '$0.00';
+                document.getElementById('abcDripCost').textContent = '$' + abcDripCost.toFixed(2);
+                document.getElementById('abcValleyCost').textContent = valleyMetal > 0 ? '$' + abcValleyCost.toFixed(2) : '$0.00';
+                document.getElementById('abcNailsCost').textContent = '$' + abcNailsCost.toFixed(2);
+                document.getElementById('abcCapNailsCost').textContent = '$' + abcCapNailsCost.toFixed(2);
+                document.getElementById('abcAccessoriesCost').textContent = '$' + abcAccessoriesCost.toFixed(2);
+                document.getElementById('abcRidgeVentCost').textContent = ridgeVentPcs > 0 ? '$' + abcRidgeVentCost.toFixed(2) : '$0.00';
+                document.getElementById('abcStepFlashCost').textContent = stepFlashing > 0 ? '$' + abcStepFlashCost.toFixed(2) : '$0.00';
+                document.getElementById('abcTurbineCost').textContent = turbines > 0 ? '$' + abcTurbineCost.toFixed(2) : '$0.00';
+                document.getElementById('abcSolarCost').textContent = solarTurbines > 0 ? '$' + abcSolarCost.toFixed(2) : '$0.00';
+                document.getElementById('abcSatelliteCost').textContent = satelliteReplace > 0 ? '$' + abcSatelliteCost.toFixed(2) : '$0.00';
+                document.getElementById('abcPaintCost').textContent = paintJacks ? '$' + abcPaintCost.toFixed(2) : '$0.00';
+                document.getElementById('abcOSBCost').textContent = osbSheets > 0 ? '$' + abcOSBCost.toFixed(2) : '$0.00';
+                document.getElementById('abcLumberCost').textContent = totalWoodLF > 0 ? '$' + abcLumberCost.toFixed(2) : '$0.00';
+                document.getElementById('abcGutterCost').textContent = gutterLF > 0 ? '$' + abcGutterCost.toFixed(2) : '$0.00';
+                document.getElementById('abcDumpsterCost').textContent = haulAway ? '$' + abcDumpsterCost.toFixed(2) : '$0.00';
+                document.getElementById('abcSatRemoveCost').textContent = satelliteRemove > 0 ? '$' + abcSatRemoveCost.toFixed(2) : '$0.00';
+                document.getElementById('abcTotal').textContent = '$' + abcTotalCost.toFixed(2);
+                
+                // Savings comparison
+                const savings = Math.abs(qxoTotalCost - abcTotalCost);
+                const savingsPercent = ((savings / Math.max(qxoTotalCost, abcTotalCost)) * 100).toFixed(1);
+                
+                if (qxoTotalCost < abcTotalCost) {
+                    document.getElementById('bestSupplier').textContent = 'QXO (Beacon)';
+                    document.getElementById('bestSupplier').style.color = 'var(--accent-blue)';
+                } else if (abcTotalCost < qxoTotalCost) {
+                    document.getElementById('bestSupplier').textContent = 'ABC Supply';
+                    document.getElementById('bestSupplier').style.color = 'var(--accent-red)';
+                } else {
+                    document.getElementById('bestSupplier').textContent = 'Same Price';
+                    document.getElementById('bestSupplier').style.color = 'var(--accent-green)';
+                }
+                
+                document.getElementById('savingsAmount').textContent = '$' + savings.toFixed(2);
+                document.getElementById('savingsPercent').textContent = savingsPercent + '%';
+                
+            } else {
+                document.getElementById('supplierPricingSection').style.display = 'none';
+            }
         }
 
         // ============================================================
@@ -1675,6 +2302,14 @@
         document.getElementById('roofComplexity').addEventListener('change', updateAutoWaste);
         document.getElementById('roofPitch').addEventListener('change', updatePitchInfo);
         document.getElementById('shingleBrand').addEventListener('change', updateBrandCoverage);
+        document.getElementById('enablePricing').addEventListener('change', togglePricingInputs);
+        
+        // Toggle pricing inputs visibility
+        function togglePricingInputs() {
+            const show = document.getElementById('enablePricing').checked;
+            document.getElementById('pricingInputs').style.display = show ? 'block' : 'none';
+            calculate();
+        }
 
         // AUTO-CALCULATE: Real-time updates on any input change
         document.querySelectorAll('input, select').forEach(element => {
